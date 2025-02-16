@@ -1,5 +1,7 @@
 // import { useState } from "react";
+import { deleteTask, toggleCompleteState } from "@/features/task/taskSlice";
 import { cn } from "@/lib/utils";
+import { useAppDispatch } from "@/redux/hook";
 import { ITask } from "@/types";
 import { Trash2 } from "lucide-react";
 
@@ -15,6 +17,8 @@ const TaskCard = ({ task }: IProps) => {
   //   onToggle(!completed);
   // };
 
+  const dispatch = useAppDispatch();
+
   return (
     <div className="flex items-center justify-between w-10/12  p-5 m-5 ml-auto mr-auto  shadow-md rounded-lg border border-gray-200">
       <div
@@ -22,29 +26,35 @@ const TaskCard = ({ task }: IProps) => {
           "w-6 h-6 bg-blue-500 rounded-full",
 
           {
-            "bg-green-500": task.priority === "Low",
-            "bg-yellow-500": task.priority === "Medium",
-            "bg-red-500": task.priority === "High",
+            "bg-green-500": task.priority === "low",
+            "bg-yellow-500": task.priority === "medium",
+            "bg-red-500": task.priority === "high",
           }
         )}
       ></div>
       {/* Middle Section - Title & Description */}
       <div className="flex-1 ml-4">
-        <h3 className={`text-lg font-semibold `}>{task.title}</h3>
+        <h3
+          className={cn(`text-lg font-semibold`, {
+            "line-through": task.isCompleted,
+          })}
+        >
+          {task.title}
+        </h3>
         <p className={`text-sm `}>{task.description}</p>
       </div>
 
       {/* Left Section - Checkbox */}
       <input
         type="checkbox"
-        // checked={completed}
-        // onChange={handleToggle}
+        checked={task.isCompleted}
+        onChange={() => dispatch(toggleCompleteState(task.id))}
         className="w-5 h-5 text-blue-500 border-gray-300 mr-5 rounded focus:ring-2 focus:ring-blue-400"
       />
 
       {/* Right Section - Delete Button */}
       <button
-        // onClick={onDelete}
+        onClick={() => dispatch(deleteTask(task.id))}
         className="text-red-500 hover:text-red-700 p-2 rounded-md transition"
         aria-label="Delete Task"
       >

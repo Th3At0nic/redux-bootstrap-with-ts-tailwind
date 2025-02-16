@@ -34,14 +34,24 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { FormProvider, useForm } from "react-hook-form";
+import {
+  FieldValues,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
+import { useAppDispatch } from "@/redux/hook";
+import { addTask } from "@/features/task/taskSlice";
 
 export function AddTaskModal() {
   const form = useForm();
 
-  const onSubmit = (data: any) => {
+  const dispatch = useAppDispatch();
+
+  const onSubmit: SubmitHandler<FieldValues> = (data: any) => {
     console.log(data);
+    dispatch(addTask(data));
   };
 
   return (
@@ -97,7 +107,7 @@ export function AddTaskModal() {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
+                            " pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
