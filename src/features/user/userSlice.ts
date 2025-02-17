@@ -1,6 +1,6 @@
 import { RootState } from "@/redux/store";
 import { IUser } from "./../../types";
-import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   users: [
@@ -11,20 +11,12 @@ const initialState = {
   ],
 };
 
-type DraftUser = Pick<IUser, "name">;
-
-const createUser = (userData: DraftUser) => {
-  const result = { id: nanoid(), ...userData };
-  return result;
-};
-
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     addUser: (state, action: PayloadAction<IUser>) => {
-      const newUser = createUser(action.payload);
-      state.users.push(newUser);
+      state.users.push(action.payload);
     },
   },
 });

@@ -131,7 +131,7 @@ export function EditTaskModal({ task }: { task: ITask }) {
                       </SelectTrigger>
                       <SelectContent>
                         {users.map((user) => (
-                          <SelectItem value={user.id}>{user.name}</SelectItem>
+                          <SelectItem value={user.id} key={user.id}>{user.name}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
