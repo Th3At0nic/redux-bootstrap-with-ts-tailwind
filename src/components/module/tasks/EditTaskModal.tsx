@@ -40,29 +40,41 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Pencil } from "lucide-react";
 import { useAppDispatch } from "@/redux/hook";
-import { addTask } from "@/features/task/taskSlice";
+import { updateTask } from "@/features/task/taskSlice";
+import { ITask } from "@/types";
 
-export function AddTaskModal() {
+export function EditTaskModal({ task }: { task: ITask }) {
   const form = useForm();
 
   const dispatch = useAppDispatch();
 
   const onSubmit: SubmitHandler<FieldValues> = (data: any) => {
-    dispatch(addTask(data));
+    dispatch(
+      updateTask({
+        id: task.id, // Keep the same task ID
+        isCompleted: task.isCompleted,
+        title: data.title || task.title, // Keep existing title if empty
+        description: data.description || task.description, // Keep existing description
+        dueDate: data.dueDate || task.dueDate, // Keep existing date
+        priority: data.priority || task.priority, // Keep existing priority
+      })
+    );
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Add Task</Button>
+        <Button variant={"outline"} className="p-2 mr-5 text-green-500">
+          <Pencil size={18} />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Task</DialogTitle>
+          <DialogTitle>Edit Task</DialogTitle>
         </DialogHeader>
-        <DialogDescription>Fill up this form to add task</DialogDescription>
+        <DialogDescription>Fill up this form to edit task</DialogDescription>
         <FormProvider {...form}>
           <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
@@ -72,7 +84,10 @@ export function AddTaskModal() {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input {...field} value={field.value || ""} />
+                    <Input
+                      {...field}
+                      value={field.value ?? task.title}
+                    />
                   </FormControl>
                   <FormDescription />
                   <FormMessage />
@@ -86,7 +101,10 @@ export function AddTaskModal() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea {...field} value={field.value || ""} />
+                    <Textarea
+                      {...field}
+                      value={field.value ?? task.description}
+                    />
                   </FormControl>
                   <FormDescription />
                   <FormMessage />
@@ -112,6 +130,8 @@ export function AddTaskModal() {
                         >
                           {field.value ? (
                             format(new Date(field.value), "PPP")
+                          ) : task.dueDate ? (
+                            format(new Date(task.dueDate), "PPP")
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -149,10 +169,10 @@ export function AddTaskModal() {
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value || ""}
+                      defaultValue={field.value ?? task.priority}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Priority" />
+                        <SelectValue placeholder={task.priority} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="high">High</SelectItem>

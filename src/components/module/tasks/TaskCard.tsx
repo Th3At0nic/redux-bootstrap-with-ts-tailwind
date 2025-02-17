@@ -4,23 +4,18 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch } from "@/redux/hook";
 import { ITask } from "@/types";
 import { Trash2 } from "lucide-react";
+import { EditTaskModal } from "./EditTaskModal";
 
 interface IProps {
   task: ITask;
 }
 
 const TaskCard = ({ task }: IProps) => {
-  // const [completed, setCompleted] = useState(false);
-
-  // const handleToggle = () => {
-  //   setCompleted(!completed);
-  //   onToggle(!completed);
-  // };
-
   const dispatch = useAppDispatch();
 
   return (
     <div className="flex items-center justify-between w-10/12  p-5 m-5 ml-auto mr-auto  shadow-md rounded-lg border border-gray-200">
+      {/* Round ball shape icon */}
       <div
         className={cn(
           "w-6 h-6 bg-blue-500 rounded-full",
@@ -43,6 +38,10 @@ const TaskCard = ({ task }: IProps) => {
         </h3>
         <p className={`text-sm `}>{task.description}</p>
       </div>
+
+      {/* Edit Button */}
+
+      <EditTaskModal task={task} />
 
       {/* Left Section - Checkbox */}
       <input

@@ -16,7 +16,7 @@ const initialState: IInitialState = {
       id: "haho123",
       title: "Create Github Repo",
       description: "Create homepage and routing",
-      dueDate: "2025-11",
+      dueDate: "2025-05-06T18:00:00.000Z",
       isCompleted: false,
       priority: "low",
     },
@@ -24,7 +24,7 @@ const initialState: IInitialState = {
       id: "hahso123",
       title: "Create Github Repo",
       description: "Create homepage and routing",
-      dueDate: "2025-11",
+      dueDate: "2025-02-06T18:00:00.000Z",
       isCompleted: true,
       priority: "medium",
     },
@@ -57,6 +57,18 @@ const taskSlice = createSlice({
     deleteTask: (state, action: PayloadAction<string>) => {
       state.tasks = state.tasks.filter((task) => task.id !== action.payload);
     },
+    updateTask: (state, action: PayloadAction<ITask>) => {
+      const index = state.tasks.findIndex(
+        (task) => task.id === action.payload.id
+      );
+
+      if (index !== -1) {
+        state.tasks[index] = {
+          ...state.tasks[index],
+          ...action.payload,
+        };
+      }
+    },
   },
 });
 
@@ -68,6 +80,7 @@ export const selectFilter = (state: RootState) => {
   return state.todo.filter;
 };
 
-export const { addTask, toggleCompleteState, deleteTask } = taskSlice.actions;
+export const { addTask, toggleCompleteState, deleteTask, updateTask } =
+  taskSlice.actions;
 
 export default taskSlice.reducer;
