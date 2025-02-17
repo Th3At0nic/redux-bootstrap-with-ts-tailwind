@@ -11,3 +11,4 @@ export interface IInitialState {
   tasks: ITask[];
   filter: "all" | "high" | "medium" | "low";
 }
+
