@@ -45,8 +45,11 @@ import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { updateTask } from "@/features/task/taskSlice";
 import { ITask } from "@/types";
 import { selectUser } from "@/features/user/userSlice";
+import { useState } from "react";
 
 export function EditTaskModal({ task }: { task: ITask }) {
+  const [open, setOpen] = useState(false);
+
   const form = useForm();
 
   const dispatch = useAppDispatch();
@@ -64,10 +67,13 @@ export function EditTaskModal({ task }: { task: ITask }) {
         priority: data.priority || task.priority, // Keep existing priority
       })
     );
+
+    setOpen(false);
+    form.reset();
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={"outline"} className="p-2 mr-5 text-green-500">
           <Pencil size={18} />
@@ -131,7 +137,9 @@ export function EditTaskModal({ task }: { task: ITask }) {
                       </SelectTrigger>
                       <SelectContent>
                         {users.map((user) => (
-                          <SelectItem value={user.id} key={user.id}>{user.name}</SelectItem>
+                          <SelectItem value={user.id} key={user.id}>
+                            {user.name}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>

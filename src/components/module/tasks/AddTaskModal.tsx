@@ -44,8 +44,11 @@ import { CalendarIcon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addTask } from "@/features/task/taskSlice";
 import { selectUser } from "@/features/user/userSlice";
+import { useState } from "react";
 
 export function AddTaskModal() {
+  const [open, setOpen] = useState(false);
+
   const form = useForm();
 
   const dispatch = useAppDispatch();
@@ -54,10 +57,12 @@ export function AddTaskModal() {
 
   const onSubmit: SubmitHandler<FieldValues> = (data: any) => {
     dispatch(addTask(data));
+    setOpen(false);
+    form.reset();
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Add Task</Button>
       </DialogTrigger>

@@ -21,6 +21,7 @@ import { addUser } from "@/features/user/userSlice";
 import { useAppDispatch } from "@/redux/hook";
 import { IUser } from "@/types";
 import { nanoid } from "@reduxjs/toolkit";
+import { useState } from "react";
 import {
   FieldValues,
   FormProvider,
@@ -29,6 +30,8 @@ import {
 } from "react-hook-form";
 
 export function AddUserModal() {
+  const [open, setOpen] = useState(false);
+
   const form = useForm();
   const dispatch = useAppDispatch();
 
@@ -44,10 +47,13 @@ export function AddUserModal() {
       ...userData,
     };
     dispatch(addUser(newUser));
+
+    setOpen(false);
+    form.reset();
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Add User</Button>
       </DialogTrigger>
