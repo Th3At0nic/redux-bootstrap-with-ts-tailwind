@@ -41,14 +41,17 @@ import {
   useForm,
 } from "react-hook-form";
 import { CalendarIcon, Pencil } from "lucide-react";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { updateTask } from "@/features/task/taskSlice";
 import { ITask } from "@/types";
+import { selectUser } from "@/features/user/userSlice";
 
 export function EditTaskModal({ task }: { task: ITask }) {
   const form = useForm();
 
   const dispatch = useAppDispatch();
+
+  const users = useAppSelector(selectUser);
 
   const onSubmit: SubmitHandler<FieldValues> = (data: any) => {
     dispatch(
@@ -84,10 +87,7 @@ export function EditTaskModal({ task }: { task: ITask }) {
                 <FormItem>
                   <FormLabel>Title</FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      value={field.value ?? task.title}
-                    />
+                    <Input {...field} value={field.value ?? task.title} />
                   </FormControl>
                   <FormDescription />
                   <FormMessage />
@@ -105,6 +105,36 @@ export function EditTaskModal({ task }: { task: ITask }) {
                       {...field}
                       value={field.value ?? task.description}
                     />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assignedTo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assigned To</FormLabel>
+
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value ?? task.assignedTo}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={task.assignedTo ?? "Select User"}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {users.map((user) => (
+                          <SelectItem value={user.id}>{user.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormDescription />
                   <FormMessage />

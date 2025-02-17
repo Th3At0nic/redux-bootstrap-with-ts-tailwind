@@ -41,13 +41,16 @@ import {
   useForm,
 } from "react-hook-form";
 import { CalendarIcon } from "lucide-react";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { addTask } from "@/features/task/taskSlice";
+import { selectUser } from "@/features/user/userSlice";
 
 export function AddTaskModal() {
   const form = useForm();
 
   const dispatch = useAppDispatch();
+
+  const users = useAppSelector(selectUser);
 
   const onSubmit: SubmitHandler<FieldValues> = (data: any) => {
     dispatch(addTask(data));
@@ -87,6 +90,36 @@ export function AddTaskModal() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea {...field} value={field.value || ""} />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="assignedTo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assigned To</FormLabel>
+
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || ""}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select User" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {users.map((user) => (
+                          <SelectItem value={user.id} key={user.id}>
+                            {user.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormDescription />
                   <FormMessage />

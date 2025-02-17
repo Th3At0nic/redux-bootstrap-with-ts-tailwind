@@ -1,10 +1,11 @@
 // import { useState } from "react";
 import { deleteTask, toggleCompleteState } from "@/features/task/taskSlice";
 import { cn } from "@/lib/utils";
-import { useAppDispatch } from "@/redux/hook";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { ITask } from "@/types";
 import { Trash2 } from "lucide-react";
 import { EditTaskModal } from "./EditTaskModal";
+import { selectUser } from "@/features/user/userSlice";
 
 interface IProps {
   task: ITask;
@@ -12,6 +13,10 @@ interface IProps {
 
 const TaskCard = ({ task }: IProps) => {
   const dispatch = useAppDispatch();
+
+  const users = useAppSelector(selectUser);
+
+  const assignedUser = users.find((user) => user.id === task.assignedTo);
 
   return (
     <div className="flex items-center justify-between w-10/12  p-5 m-5 ml-auto mr-auto  shadow-md rounded-lg border border-gray-200">
@@ -36,6 +41,7 @@ const TaskCard = ({ task }: IProps) => {
         >
           {task.title}
         </h3>
+        <p>Assigned To - {assignedUser ? assignedUser.name : "None"}</p>
         <p className={`text-sm `}>{task.description}</p>
       </div>
 
