@@ -65,6 +65,7 @@ export function EditTaskModal({ task }: { task: ITask }) {
         description: data.description || task.description, // Keep existing description
         dueDate: data.dueDate || task.dueDate, // Keep existing date
         priority: data.priority || task.priority, // Keep existing priority
+        assignedTo: data.assignedTo || task.assignedTo,
       })
     );
 

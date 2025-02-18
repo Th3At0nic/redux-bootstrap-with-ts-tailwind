@@ -11,6 +11,7 @@ const initialState: IInitialState = {
       dueDate: "2025-11",
       isCompleted: false,
       priority: "high",
+      assignedTo: "askdf",
     },
     {
       id: "haho123",
@@ -19,6 +20,7 @@ const initialState: IInitialState = {
       dueDate: "2025-05-06T18:00:00.000Z",
       isCompleted: false,
       priority: "low",
+      assignedTo: "",
     },
     {
       id: "hahso123",
@@ -27,12 +29,16 @@ const initialState: IInitialState = {
       dueDate: "2025-02-06T18:00:00.000Z",
       isCompleted: true,
       priority: "medium",
+      assignedTo: "",
     },
   ],
   filter: "all",
 };
 
-type DraftTask = Pick<ITask, "title" | "description" | "dueDate" | "priority">;
+type DraftTask = Pick<
+  ITask,
+  "title" | "description" | "dueDate" | "priority" | "assignedTo"
+>;
 
 const createTask = (taskData: DraftTask): ITask => {
   const result = { id: nanoid(), isCompleted: false, ...taskData };
