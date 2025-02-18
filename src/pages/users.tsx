@@ -1,10 +1,12 @@
 import { AddUserModal } from "@/components/module/users/AddUserModal";
-import { selectUser } from "@/features/user/userSlice";
-import { useAppSelector } from "@/redux/hook";
+import { removeUser, selectUser } from "@/features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { Trash2 } from "lucide-react";
 
 function Users() {
   const users = useAppSelector(selectUser);
+
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -23,7 +25,10 @@ function Users() {
               className="flex justify-between items-center border-2 border-green-500 shadow-md rounded-lg p-4  h-24"
             >
               <span className="text-lg font-medium">{user.name}</span>
-              <button className="text-red-500 hover:text-red-700">
+              <button
+                onClick={() => dispatch(removeUser(user.id))}
+                className="text-red-500 hover:text-red-700"
+              >
                 <Trash2 size={24} />
               </button>
             </div>
